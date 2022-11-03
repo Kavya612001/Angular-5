@@ -70,22 +70,26 @@ export class UsersComponent implements OnInit {
       ];
       this.loaded = true;
   
-    this.addUser({
-      firstName: 'Subbu',
-      lastName: 'Chandran',
-      // age: 80,
-      address: {
-          street: '3/1 cross street',
-          city: 'vnr',
-          state: 'TN'
-      }
-    })
+    // this.addUser({
+    //   firstName: 'Subbu',
+    //   lastName: 'Chandran',
+    //   // age: 80,
+    //   address: {
+    //       street: '3/1 cross street',
+    //       city: 'vnr',
+    //       state: 'TN'
+    //   }
+    // })
   }
-  addUser(user:User) {
-    this.users.push(user);
-  }
+  // addUser(user:User) {
+  //   this.users.push(user);
+  // }
 
   onSubmit(e: Event) {
     e.preventDefault();
+  }
+
+  addUser() {
+    
   }
 }
