@@ -8,12 +8,23 @@ import { User } from 'src/app/models/User';
 })
 export class UsersComponent implements OnInit {
 
+  user : User = {
+    firstName: '',
+    lastName: '',
+    age: undefined,
+    address: {
+      street: '',
+      city: '',
+      state: ''
+    } || undefined
+
+  };
   users!: User[];
   loaded: boolean = true;
   showExtended: boolean = true;
-  enableAdd: boolean = true;
-  currentClasses = {};
-  currentStyles = {}
+  enableAdd: boolean = false;
+  showUserForm: boolean = false;
+
 
   constructor() { }
 
@@ -28,9 +39,8 @@ export class UsersComponent implements OnInit {
                 city: 'vnr',
                 state: 'TN'
             },
-            image: 'http://lorempixel.com/600/600/people/3',
-            balance: 200,
-            registered: new Date('01/06/2001')
+            registered: new Date('01/06/2001'),
+            hide: false
          },
          {
           firstName: 'Rajesh',
@@ -41,10 +51,9 @@ export class UsersComponent implements OnInit {
               city: 'Chennai',
               state: 'TN'
           },
-          image: 'http://lorempixel.com/600/600/people/2',
           isActive: true,
-          balance: 300,
-          registered: new Date('01/27/1996')
+          registered: new Date('01/27/1996'),
+          hide: false
        },
        {
         firstName: 'Premalatha',
@@ -55,9 +64,8 @@ export class UsersComponent implements OnInit {
             city: 'vnr',
             state: 'TN'
         },
-        image: 'http://lorempixel.com/600/600/people/4',
-        balance: 500,
-        registered: new Date('06/12/2001 09:36:00')
+        registered: new Date('06/12/2001 09:36:00'),
+        hide: false
      }
       ];
       this.loaded = true;
@@ -72,25 +80,12 @@ export class UsersComponent implements OnInit {
           state: 'TN'
       }
     })
-
-    this.setCurrentClasses();
-    this.setCurrentStyles();
   }
   addUser(user:User) {
     this.users.push(user);
   }
 
-  setCurrentClasses() {
-    this.currentClasses = {
-      'btn-success' : this.enableAdd,
-      'big-text' : this.showExtended
-    }
-  }
-
-  setCurrentStyles() {
-    this.currentStyles = {
-      'padding-top': this.showExtended ? '0' : '40px',
-      'font-size': this.showExtended ? '': '40px'
-    }
+  onSubmit(e: Event) {
+    e.preventDefault();
   }
 }
