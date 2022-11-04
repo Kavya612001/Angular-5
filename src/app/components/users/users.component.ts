@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { User } from 'src/app/models/User';
 
 @Component({
@@ -11,19 +12,13 @@ export class UsersComponent implements OnInit {
   user : User = {
     firstName: '',
     lastName: '',
-    age: undefined,
-    address: {
-      street: '',
-      city: '',
-      state: ''
-    } || undefined
-
+    email: ''
   };
   users!: User[];
   loaded: boolean = true;
-  showExtended: boolean = true;
   enableAdd: boolean = false;
   showUserForm: boolean = false;
+  @ViewChild('userForm' , {static: false}) form: any;
 
 
   constructor() { }
@@ -33,63 +28,41 @@ export class UsersComponent implements OnInit {
         {
             firstName: 'Kavya',
             lastName: 'Sampath',
-            age: 30,
-            address: {
-                street: '3/2 main street',
-                city: 'vnr',
-                state: 'TN'
-            },
+            email: 'kavya612001@gmail.com',
             registered: new Date('01/06/2001'),
-            hide: false
+            hide: true
          },
          {
           firstName: 'Rajesh',
           lastName: 'Dayalan',
-          age: 26,
-          address: {
-              street: '3/4 rose street',
-              city: 'Chennai',
-              state: 'TN'
-          },
+          email: 'rd@gmail.com',
           isActive: true,
           registered: new Date('01/27/1996'),
-          hide: false
+          hide: true
        },
        {
         firstName: 'Premalatha',
         lastName: 'Chandran',
-        age: 50,
-        address: {
-            street: '3/1 cross street',
-            city: 'vnr',
-            state: 'TN'
-        },
+        email: 'premalatha@gmail.com',
         registered: new Date('06/12/2001 09:36:00'),
-        hide: false
+        hide: true
      }
       ];
       this.loaded = true;
-  
-    // this.addUser({
-    //   firstName: 'Subbu',
-    //   lastName: 'Chandran',
-    //   // age: 80,
-    //   address: {
-    //       street: '3/1 cross street',
-    //       city: 'vnr',
-    //       state: 'TN'
-    //   }
-    // })
   }
-  // addUser(user:User) {
-  //   this.users.push(user);
-  // }
+ 
+  onSubmit(object: NgForm) {
+    if(!object.valid) {
+      console.log('form is not valid');
+    }
+    else {
+      object.value.isActive = true;
+      object.value.registered = new Date();
+      object.value.hide = true;
 
-  onSubmit(e: Event) {
-    e.preventDefault();
-  }
+      this.users.unshift(object.value);
 
-  addUser() {
-    
+      this.form.reset();
+    }
   }
 }
