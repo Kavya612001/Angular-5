@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DataService } from 'src/app/services/data.service';
+import { UserService } from 'src/app/services/user.service';
 import { NgForm } from '@angular/forms';
 import { User } from 'src/app/models/User';
 
@@ -24,7 +24,7 @@ export class UsersComponent implements OnInit {
 
   // Injecting the service inside the constructor 
   // We can now access the serice props and methods inside this component
-  constructor(private dataService: DataService) { 
+  constructor(private userService: UserService) { 
 
   }
 
@@ -32,7 +32,7 @@ export class UsersComponent implements OnInit {
     // this.dataService.getData().subscribe(data => {
     //   console.log(data);
     // });
-    this.dataService.getUsers().subscribe(users => {
+    this.userService.getUsers().subscribe(users => {
       this.users = users;
       this.loaded = true;
     });
@@ -47,7 +47,7 @@ export class UsersComponent implements OnInit {
       object.value.registered = new Date();
       object.value.hide = true;
 
-      this.dataService.addUser(object.value);
+      this.userService.addUser(object.value);
 
       this.form.reset();
     }
