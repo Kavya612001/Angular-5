@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { DataService } from 'src/app/services/data.service';
 import { NgForm } from '@angular/forms';
 import { User } from 'src/app/models/User';
 
@@ -18,37 +19,23 @@ export class UsersComponent implements OnInit {
   loaded: boolean = true;
   enableAdd: boolean = false;
   showUserForm: boolean = false;
-  @ViewChild('userForm' , {static: false}) form: any;
+  @ViewChild('userForm') form: any;
+  data:any;
 
+  // Injecting the service inside the constructor 
+  // We can now access the serice props and methods inside this component
+  constructor(private dataService: DataService) { 
 
-  constructor() { }
+  }
 
   ngOnInit(): void {
-      this.users = [
-        {
-            firstName: 'Kavya',
-            lastName: 'Sampath',
-            email: 'kavya612001@gmail.com',
-            registered: new Date('01/06/2001'),
-            hide: true
-         },
-         {
-          firstName: 'Rajesh',
-          lastName: 'Dayalan',
-          email: 'rd@gmail.com',
-          isActive: true,
-          registered: new Date('01/27/1996'),
-          hide: true
-       },
-       {
-        firstName: 'Premalatha',
-        lastName: 'Chandran',
-        email: 'premalatha@gmail.com',
-        registered: new Date('06/12/2001 09:36:00'),
-        hide: true
-     }
-      ];
+    // this.dataService.getData().subscribe(data => {
+    //   console.log(data);
+    // });
+    this.dataService.getUsers().subscribe(users => {
+      this.users = users;
       this.loaded = true;
+    });
   }
  
   onSubmit(object: NgForm) {
@@ -60,7 +47,7 @@ export class UsersComponent implements OnInit {
       object.value.registered = new Date();
       object.value.hide = true;
 
-      this.users.unshift(object.value);
+      this.dataService.addUser(object.value);
 
       this.form.reset();
     }
