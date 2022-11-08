@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
+import { NgForm } from '@angular/forms';
 import { User } from 'src/app/models/User';
 
 @Component({
@@ -8,89 +10,46 @@ import { User } from 'src/app/models/User';
 })
 export class UsersComponent implements OnInit {
 
+  user : User = {
+    firstName: '',
+    lastName: '',
+    email: ''
+  };
   users!: User[];
   loaded: boolean = true;
-  showExtended: boolean = true;
-  enableAdd: boolean = true;
-  currentClasses = {};
-  currentStyles = {}
+  enableAdd: boolean = false;
+  showUserForm: boolean = false;
+  @ViewChild('userForm') form: any;
+  data:any;
 
-  constructor() { }
+  // Injecting the service inside the constructor 
+  // We can now access the serice props and methods inside this component
+  constructor(private userService: UserService) { 
+
+  }
 
   ngOnInit(): void {
-      this.users = [
-        {
-            firstName: 'Kavya',
-            lastName: 'Sampath',
-            age: 30,
-            address: {
-                street: '3/2 main street',
-                city: 'vnr',
-                state: 'TN'
-            },
-            image: 'http://lorempixel.com/600/600/people/3',
-            balance: 200,
-            registered: new Date('01/06/2001')
-         },
-         {
-          firstName: 'Rajesh',
-          lastName: 'Dayalan',
-          age: 26,
-          address: {
-              street: '3/4 rose street',
-              city: 'Chennai',
-              state: 'TN'
-          },
-          image: 'http://lorempixel.com/600/600/people/2',
-          isActive: true,
-          balance: 300,
-          registered: new Date('01/27/1996')
-       },
-       {
-        firstName: 'Premalatha',
-        lastName: 'Chandran',
-        age: 50,
-        address: {
-            street: '3/1 cross street',
-            city: 'vnr',
-            state: 'TN'
-        },
-        image: 'http://lorempixel.com/600/600/people/4',
-        balance: 500,
-        registered: new Date('06/12/2001 09:36:00')
-     }
-      ];
+    // this.dataService.getData().subscribe(data => {
+    //   console.log(data);
+    // });
+    this.userService.getUsers().subscribe(users => {
+      this.users = users;
       this.loaded = true;
-  
-    this.addUser({
-      firstName: 'Subbu',
-      lastName: 'Chandran',
-      // age: 80,
-      address: {
-          street: '3/1 cross street',
-          city: 'vnr',
-          state: 'TN'
-      }
-    })
-
-    this.setCurrentClasses();
-    this.setCurrentStyles();
+    });
   }
-  addUser(user:User) {
-    this.users.push(user);
-  }
-
-  setCurrentClasses() {
-    this.currentClasses = {
-      'btn-success' : this.enableAdd,
-      'big-text' : this.showExtended
+ 
+  onSubmit(object: NgForm) {
+    if(!object.valid) {
+      console.log('form is not valid');
     }
-  }
+    else {
+      object.value.isActive = true;
+      object.value.registered = new Date();
+      object.value.hide = true;
 
-  setCurrentStyles() {
-    this.currentStyles = {
-      'padding-top': this.showExtended ? '0' : '40px',
-      'font-size': this.showExtended ? '': '40px'
+      this.userService.addUser(object.value);
+
+      this.form.reset();
     }
   }
 }
